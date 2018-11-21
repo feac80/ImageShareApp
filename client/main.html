@@ -1,0 +1,118 @@
+<head>
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+    integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+    crossorigin="anonymous"
+  />
+  <title>images</title>
+</head>
+
+<body>
+  <nav
+    class="site-nav family-sans text-uppercase navbar navbar-expand-md bg-secondary navbar-dark sticky-top"
+  >
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#page-hero">
+        <i class="fas fa-cube"></i>Image share</a
+      >
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <section class="collapse navbar-collapse " id="navbarSupportedContent">
+        <div class="navbar-nav ml-auto">
+          <a class="nav-item nav-link" href="#page-hero">home</a>
+          <a class="nav-item nav-link" href="#page-multicolumn">
+            {{> loginButtons}}</a
+          >
+        </div>
+      </section>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Welcome to Images share App! {{ userName }}</h1>
+    {{> addImageForm}} <br />
+    {{> images}}
+  </div>
+</body>
+<template name="images">
+  {{#if currentUser}}
+  <button type="button" class="js-show-add-form btn btn-success">
+    Add an Image
+  </button>
+  {{#if filteredImage}}
+  <p>
+    Showing images by user:{{ filteredUserName }},
+    <a href="#" class="js-unset-image-filter">Show all Images</a>
+  </p>
+  {{/if}} {{/if}}
+  <div class="row">
+    {{#each images}}
+    <div class="col-sm-6 col-md-3" id="{{_id}}">
+      <div class="card">
+        <img class="js-image card-img-top" src="{{src}}" alt="{{alt}}" />
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">{{ alt }}</p>
+          <p>
+            Created by:
+            <a href="#" class="js-set-user-filter">{{getUser createdBy}} </a>
+          </p>
+          <p>
+            {{> starsRating  id=_id  class="js-rating-image" mutable=true
+           rating=rating }}
+          </p>
+          <input
+            class="js-delete-image btn btn-warning"
+            type="button"
+            value="delete"
+          />
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+</template>
+<template name="addImageForm">
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="addImageForm"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add an Image</h5>
+        </div>
+        <div class="modal-body">
+          <form class="js-add-image-form">
+            <input type="text" id="src" name="src" placeholder="Image url..." />
+            <input type="text" id="alt" name="alt" placeholder="Alt..." />
+            <input class="btn btn-success" type="submit" value="Save" />
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
