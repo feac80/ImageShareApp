@@ -5,6 +5,27 @@ import { Session } from 'meteor/session';
 
 import './main.html';
 
+Router.configure({
+  layoutTemplate: 'ApplicationLayout'
+});
+Router.route('/', function() {
+  this.render('welcomeMessage', { to: 'main' });
+});
+Router.route('/images', function() {
+  this.render('navBar', { to: 'navBar' });
+  this.render('images', { to: 'main' });
+});
+Router.route('/image/:id', function() {
+  this.render('navBar', { to: 'navBar' });
+  this.render('singleImage', {
+    to: 'main',
+    data: function() {
+      return Images.findOne({ _id: this.params.id });
+    }
+  });
+});
+
+//INfinite scroll
 // lastScroll = 0;
 Session.set('imageLimit', 8);
 $(window).scroll(function() {
@@ -16,7 +37,7 @@ $(window).scroll(function() {
     // console.log(Session.get('imageLimit'));
   }
 });
-
+//account setting
 Accounts.ui.config({
   passwordSignupFields: 'USERNAME_AND_EMAIL'
 });
@@ -73,9 +94,9 @@ Template.body.helpers({
 });
 
 Template.images.events({
-  'click .js-image': function(event) {
-    $(event.target).css('width', '50px');
-  },
+  // 'click .js-image': function(event) {
+  //   $(event.target).css('width', '50px');
+  // },
   'click .js-delete-image': function() {
     $('#' + this._id).hide('slow', () => {
       Images.remove({ _id: this._id });

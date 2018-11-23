@@ -8,7 +8,18 @@
   <title>images</title>
 </head>
 
-<body>
+<body></body>
+<template name="ApplicationLayout">
+  {{> yield "navBar"}} {{> yield "main"}}
+</template>
+
+<template name="welcomeMessage">
+  <div class="jumbotron">
+    <h1>Welcome to Images share App! {{ userName }}</h1>
+    <a href="/images" class="btn btn-info" type="button">Enter</a>
+  </div>
+</template>
+<template name="navBar">
   <nav
     class="site-nav family-sans text-uppercase navbar navbar-expand-md bg-secondary navbar-dark sticky-top"
   >
@@ -38,51 +49,61 @@
       </section>
     </div>
   </nav>
-
-  <div class="container">
-    <h1>Welcome to Images share App! {{ userName }}</h1>
-    {{> addImageForm}} <br />
-    {{> images}}
-  </div>
-</body>
-<template name="images">
-  {{#if currentUser}}
-  <button type="button" class="js-show-add-form btn btn-success">
-    Add an Image
-  </button>
-  {{#if filteredImage}}
-  <p>
-    Showing images by user:{{ filteredUserName }},
-    <a href="#" class="js-unset-image-filter">Show all Images</a>
-  </p>
-  {{/if}} {{/if}}
-  <div class="row">
-    {{#each images}}
-    <div class="col-sm-6 col-md-3" id="{{_id}}">
-      <div class="card">
-        <img class="js-image card-img-top" src="{{src}}" alt="{{alt}}" />
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">{{ alt }}</p>
-          <p>
-            Created by:
-            <a href="#" class="js-set-user-filter">{{getUser createdBy}} </a>
-          </p>
-          <p>
-            {{> starsRating  id=_id  class="js-rating-image" mutable=true
-           rating=rating }}
-          </p>
-          <input
-            class="js-delete-image btn btn-warning"
-            type="button"
-            value="delete"
-          />
-        </div>
-      </div>
-    </div>
-    {{/each}}
+</template>
+<template name="singleImage">
+  <div class="container center">
+    <h2>{{ alt }}</h2>
+    <img class="single-image" src="{{ src }}" />
+    <hr />
+    <a href="/images">Go back to images</a>
   </div>
 </template>
+<template name="images">
+  {{> addImageForm}}
+  <div class="container">
+    {{#if currentUser}}
+    <button type="button" class="js-show-add-form btn btn-success">
+      Add an Image
+    </button>
+    {{#if filteredImage}}
+    <p>
+      Showing images by user:{{ filteredUserName }},
+      <a href="#" class="js-unset-image-filter">Show all Images</a>
+    </p>
+    {{/if}}
+    <!-- End of filtered image -->
+    {{/if}}
+    <div class="row">
+      {{#each images}}
+      <div class="col-sm-6 col-md-3" id="{{_id}}">
+        <div class="card">
+          <a class="js-display-image" href="/image/{{_id}}"
+            ><img class="js-image card-img-top" src="{{src}}" alt="{{alt}}"
+          /></a>
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">{{ alt }}</p>
+            <p>
+              Created by:
+              <a href="#" class="js-set-user-filter">{{getUser createdBy}} </a>
+            </p>
+            <p>
+              {{> starsRating  id=_id  class="js-rating-image" mutable=true
+           rating=rating }}
+            </p>
+            <input
+              class="js-delete-image btn btn-warning"
+              type="button"
+              value="delete"
+            />
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</template>
+<!-- add image form modal -->
 <template name="addImageForm">
   <!-- Modal -->
   <div

@@ -17,15 +17,4 @@ Meteor.startup(() => {
   console.log(Images.find().count());
 });
 
-Images.allow({
-  insert: function(userId, doc) {
-    if (Meteor.user()) {
-      if (userId == doc.createdBy) {
-        return true;
-      }
-    }
-  },
-  remove: function() {
-    return true;
-  }
-});
+
